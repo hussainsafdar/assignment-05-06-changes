@@ -1,0 +1,17 @@
+---
+- name: Install Docker on Amazon Linux
+  ansible.builtin.dnf:
+    name: docker
+    state: present
+
+- name: Start and enable Docker service
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Add ec2-user to docker group
+  ansible.builtin.user:
+    name: ec2-user
+    groups: docker
+    append: true

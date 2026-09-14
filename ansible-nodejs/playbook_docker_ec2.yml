@@ -1,0 +1,6 @@
+---
+- name: Install Docker on EC2
+  hosts: webserver
+  become: true
+  roles:
+    - docker_setup

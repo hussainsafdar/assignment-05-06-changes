@@ -1,0 +1,6 @@
+---
+- name: Install and configure Apache on EC2
+  hosts: webserver
+  become: true
+  roles:
+    - apache_setup

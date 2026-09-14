@@ -1,0 +1,23 @@
+---
+- name: Install Node.js using Homebrew
+  homebrew:
+    name: node
+    state: present
+
+- name: Verify Node.js installation
+  command: node -v
+  register: node_version_output
+  changed_when: false
+
+- name: Display installed Node.js version
+  debug:
+    msg: "Node.js installed successfully: {{ node_version_output.stdout }}"
+
+- name: Verify npm installation
+  command: npm -v
+  register: npm_version_output
+  changed_when: false
+
+- name: Display installed npm version
+  debug:
+    msg: "npm installed successfully: {{ npm_version_output.stdout }}"

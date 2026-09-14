@@ -1,0 +1,6 @@
+---
+- name: Install Node.js on local system
+  hosts: local
+  become: false
+  roles:
+    - nodejs
