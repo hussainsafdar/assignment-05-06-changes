@@ -8,6 +8,7 @@ pipeline {
         EC2_HOST = "98.90.194.84"
         SONARQUBE_ENV = "MySonarQube"
         SCANNER_HOME = tool 'SonarScanner'
+        NOTIFY_EMAIL = "muhammad.hussain@camp2.tkxel.com"
     }
 
     stages {
@@ -70,9 +71,29 @@ pipeline {
     post {
         success {
             echo " SUCCESS: Pipeline completed successfully! Image ${DOCKER_IMAGE}:${IMAGE_TAG} deployed to ${EC2_HOST}:8082"
+            emailext (
+                subject: "SUCCESS: Pipeline #${BUILD_NUMBER} - ${env.JOB_NAME}",
+                body: """
+                    <p>Pipeline completed successfully!</p>
+                    <p><b>Image:</b> ${DOCKER_IMAGE}:${IMAGE_TAG}</p>
+                    <p><b>Deployed to:</b> ${EC2_HOST}:8082</p>
+                    <p><b>Console:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
+                mimeType: 'text/html',
+                to: "${NOTIFY_EMAIL}"
+            )
         }
         failure {
             echo " FAILURE: Pipeline failed. Check console logs for build #${BUILD_NUMBER}"
+            emailext (
+                subject: "FAILURE: Pipeline #${BUILD_NUMBER} - ${env.JOB_NAME}",
+                body: """
+                    <p>Pipeline failed. Check console logs for build #${BUILD_NUMBER}.</p>
+                    <p><b>Console:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
+                mimeType: 'text/html',
+                to: "${NOTIFY_EMAIL}"
+            )
         }
     }
 }
